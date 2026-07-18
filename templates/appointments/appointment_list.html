@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Appointments{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4><i class="fa-solid fa-calendar-days"></i> My Appointments</h4>
+    {% if user.is_patient %}
+        <a href="{% url 'book_appointment' %}" class="btn btn-primary btn-sm">+ Book New</a>
+    {% endif %}
+</div>
+
+<div class="card p-3">
+    <table class="table table-hover align-middle mb-0">
+        <thead>
+            <tr>
+                {% if user.is_doctor %}
+                    <th>Patient</th>
+                {% else %}
+                    <th>Doctor</th>
+                {% endif %}
+                <th>Date</th>
+                <th>Time</th>
+                <th>Reason</th>
+                <th>Status</th>
+                {% if user.is_doctor %}
+                    <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td>{% if user.is_doctor %}{{ appt.patient }}{% else %}{{ appt.doctor }}{% endif %}</td>
+                <td>{{ appt.date }}</td>
+                <td>{{ appt.time_slot }}</td>
+                <td>{{ appt.reason|default:"-" }}</td>
+                <td>
+                    <span class="badge
+                        {% if appt.status == 'confirmed' %}bg-success
+                        {% elif appt.status == 'pending' %}bg-warning text-dark
+                        {% elif appt.status == 'completed' %}bg-primary
+                        {% else %}bg-danger{% endif %}">
+                        {{ appt.status }}
+                    </span>
+                </td>
+                {% if user.is_doctor %}
+                <td>
+                    {% if appt.status == 'pending' %}
+                        <a href="{% url 'update_status' appt.id 'confirmed' %}" class="btn btn-sm btn-outline-success">Confirm</a>
+                        <a href="{% url 'update_status' appt.id 'cancelled' %}" class="btn btn-sm btn-outline-danger">Cancel</a>
+                    {% elif appt.status == 'confirmed' %}
+                        <a href="{% url 'add_record' appt.id %}" class="btn btn-sm btn-outline-primary">Add Record</a>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted py-3">No appointments found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

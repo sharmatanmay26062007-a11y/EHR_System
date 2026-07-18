@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h4><i class="fa-solid fa-hospital-user"></i> Welcome, {{ user.get_full_name|default:user.username }}</h4>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="stat-icon icon-rose"><i class="fa-solid fa-droplet"></i></div>
+            <div>
+                <p class="stat-label">Blood Group</p>
+                <p class="stat-value">{{ profile.blood_group|default:"—" }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="stat-icon icon-navy"><i class="fa-solid fa-cake-candles"></i></div>
+            <div>
+                <p class="stat-label">Age</p>
+                <p class="stat-value">{{ profile.age|default:"—" }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="stat-icon icon-teal"><i class="fa-solid fa-calendar-check"></i></div>
+            <div>
+                <p class="stat-label">Appointments</p>
+                <p class="stat-value">{{ appointments|length }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h5><i class="fa-solid fa-calendar-days text-primary"></i> Recent Appointments</h5>
+            <hr>
+            {% for appt in appointments %}
+                <p class="mb-2">
+                    <strong>{{ appt.doctor }}</strong> — {{ appt.date }} at {{ appt.time_slot }}
+                    <span class="badge
+                        {% if appt.status == 'confirmed' %}bg-success
+                        {% elif appt.status == 'pending' %}bg-warning text-dark
+                        {% elif appt.status == 'completed' %}bg-primary
+                        {% else %}bg-danger{% endif %}">
+                        {{ appt.status }}
+                    </span>
+                </p>
+            {% empty %}
+                <p class="text-muted">No appointments yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h5><i class="fa-solid fa-file-medical text-primary"></i> Recent Records</h5>
+            <hr>
+            {% for record in records %}
+                <p class="mb-2">
+                    <strong>{{ record.diagnosis }}</strong> — {{ record.date }}
+                </p>
+            {% empty %}
+                <p class="text-muted">No medical records yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

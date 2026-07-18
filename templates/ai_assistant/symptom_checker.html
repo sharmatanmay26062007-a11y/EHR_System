@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Symptom Checker{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h4 class="mb-4"><i class="fa-solid fa-robot"></i> AI Symptom Checker</h4>
+
+        <div class="alert alert-warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            This tool provides general information only and is not a medical diagnosis.
+            Always consult a doctor for proper care.
+        </div>
+
+        <div class="card p-4 mb-4">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.symptoms.label_tag }}
+                {{ form.symptoms }}
+                <button type="submit" class="btn btn-primary mt-3">
+                    <i class="fa-solid fa-paper-plane"></i> Check Symptoms
+                </button>
+            </form>
+        </div>
+
+        <h5>Previous Checks</h5>
+        {% for chat in history %}
+        <div class="card p-3 mb-3">
+            <p class="mb-1"><strong>You:</strong> {{ chat.user_message }}</p>
+            <p class="mb-1"><strong>AI:</strong> {{ chat.ai_response }}</p>
+            <span class="badge
+                {% if chat.urgency_level == 'urgent' %}bg-danger
+                {% elif chat.urgency_level == 'moderate' %}bg-warning text-dark
+                {% else %}bg-success{% endif %}">
+                {{ chat.get_urgency_level_display }}
+            </span>
+            <small class="text-muted mt-2">{{ chat.created_at|date:"d M Y, h:i A" }}</small>
+        </div>
+        {% empty %}
+        <p class="text-muted">No symptom checks yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

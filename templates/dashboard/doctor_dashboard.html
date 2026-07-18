@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h4><i class="fa-solid fa-user-doctor"></i> Welcome, Dr. {{ user.get_full_name|default:user.username }}</h4>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="stat-icon icon-navy"><i class="fa-solid fa-stethoscope"></i></div>
+            <div>
+                <p class="stat-label">Specialization</p>
+                <p class="stat-value" style="font-size: 1.1rem;">{{ profile.specialization|default:"—" }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="stat-icon icon-amber"><i class="fa-solid fa-award"></i></div>
+            <div>
+                <p class="stat-label">Experience</p>
+                <p class="stat-value">{{ profile.experience_years }} yrs</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card">
+            <div class="stat-icon icon-teal"><i class="fa-solid fa-calendar-days"></i></div>
+            <div>
+                <p class="stat-label">Appointments</p>
+                <p class="stat-value">{{ appointments|length }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card p-3">
+    <h5><i class="fa-solid fa-calendar-days text-primary"></i> Recent Appointments</h5>
+    <hr>
+    {% for appt in appointments %}
+        <p class="mb-2">
+            <strong>{{ appt.patient }}</strong> — {{ appt.date }} at {{ appt.time_slot }}
+            <span class="badge
+                {% if appt.status == 'confirmed' %}bg-success
+                {% elif appt.status == 'pending' %}bg-warning text-dark
+                {% elif appt.status == 'completed' %}bg-primary
+                {% else %}bg-danger{% endif %}">
+                {{ appt.status }}
+            </span>
+        </p>
+    {% empty %}
+        <p class="text-muted">No appointments yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

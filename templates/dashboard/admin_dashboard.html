@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h4><i class="fa-solid fa-user-shield"></i> Admin Dashboard</h4>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card stat-card">
+            <div class="stat-icon icon-teal"><i class="fa-solid fa-hospital-user"></i></div>
+            <div>
+                <p class="stat-label">Total Patients</p>
+                <p class="stat-value">{{ total_patients }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card stat-card">
+            <div class="stat-icon icon-navy"><i class="fa-solid fa-user-doctor"></i></div>
+            <div>
+                <p class="stat-label">Total Doctors</p>
+                <p class="stat-value">{{ total_doctors }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="/admin/" class="btn btn-primary">
+        <i class="fa-solid fa-gear"></i> Go to Django Admin Panel
+    </a>
+</div>
+{% endblock %}

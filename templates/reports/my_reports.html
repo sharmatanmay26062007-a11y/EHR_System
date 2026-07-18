@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}My Reports{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4><i class="fa-solid fa-flask-vial"></i> My Lab Reports</h4>
+    <a href="{% url 'upload_report' %}" class="btn btn-primary btn-sm">+ Upload New</a>
+</div>
+
+{% for report in reports %}
+<div class="card p-3 mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h6 class="mb-1">{{ report.report_type }}</h6>
+            <small class="text-muted">Uploaded on {{ report.date_uploaded|date:"d M Y" }}</small>
+        </div>
+        <a href="{{ report.file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">View File</a>
+    </div>
+
+    {% if not report.ai_explanation %}
+        <a href="{% url 'explain_report' report.id %}" class="btn btn-sm btn-outline-info mt-3">
+            <i class="fa-solid fa-robot"></i> Explain with AI
+        </a>
+    {% endif %}
+
+    {% if report.ai_explanation %}
+        <div class="alert alert-info mt-3 mb-0">
+            <strong><i class="fa-solid fa-robot"></i> AI Explanation:</strong> {{ report.ai_explanation }}
+        </div>
+    {% endif %}
+</div>
+{% empty %}
+<p class="text-muted">No reports uploaded yet.</p>
+{% endfor %}
+{% endblock %}

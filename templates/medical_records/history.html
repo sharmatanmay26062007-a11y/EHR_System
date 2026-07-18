@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Medical History{% endblock %}
+
+{% block content %}
+<h4 class="mb-4"><i class="fa-solid fa-clock-rotate-left"></i> My Medical History</h4>
+
+{% for record in records %}
+<div class="card p-3 mb-3">
+    <div class="d-flex justify-content-between">
+        <h5>{{ record.diagnosis }}</h5>
+        <span class="text-muted">{{ record.date }}</span>
+    </div>
+    <p><strong>Doctor:</strong> {{ record.doctor }}</p>
+    <p>{{ record.notes }}</p>
+
+    {% if not record.ai_summary %}
+        <a href="{% url 'explain_record' record.id %}" class="btn btn-sm btn-outline-info mt-2">
+            <i class="fa-solid fa-robot"></i> Explain with AI
+        </a>
+    {% endif %}
+
+    {% if record.ai_summary %}
+        <div class="alert alert-info mt-2">
+            <strong><i class="fa-solid fa-robot"></i> AI Summary:</strong> {{ record.ai_summary }}
+        </div>
+    {% endif %}
+
+    {% if record.prescriptions.all %}
+        <hr>
+        <h6>Prescriptions</h6>
+        <ul class="mb-0">
+            {% for p in record.prescriptions.all %}
+                <li>{{ p.medicine_name }} — {{ p.dosage }}, {{ p.duration }} ({{ p.instructions }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% empty %}
+<p class="text-muted">No medical records yet.</p>
+{% endfor %}
+{% endblock %}
