@@ -1,5 +1,7 @@
 # EHR System — AI-Integrated Electronic Health Record Platform
 
+🔗 **Live Demo:** [https://tanmaysharma.pythonanywhere.com](https://tanmaysharma.pythonanywhere.com)
+
 A full-stack Electronic Health Record (EHR) system built with Django, featuring role-based access control for patients, doctors, and admins, along with GenAI-powered features for medical report explanation and symptom checking.
 
 ## Features
@@ -23,7 +25,6 @@ A full-stack Electronic Health Record (EHR) system built with Django, featuring 
 | AI | Google Gemini API (`google-genai`) |
 | Auth | Django session-based auth, custom user model with roles |
 
-## Project Structure
 ## Setup Instructions
 
 1. **Clone the repository**
